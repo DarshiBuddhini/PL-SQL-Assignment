@@ -1,0 +1,10 @@
+
+CREATE TABLE darshi_storage_tab(
+    containerID NUMBER,
+    food_item_id NUMBER,
+    company_id VARCHAR2(30),
+    branch_id VARCHAR2(30),
+    status VARCHAR2(10) NOT NULL,
+    PRIMARY KEY (company_id, branch_id,containerID, food_item_id)
+   
+);

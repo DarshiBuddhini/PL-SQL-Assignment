@@ -1,0 +1,11 @@
+CREATE TABLE darshi_container_tab (
+    containerID NUMBER,
+    currentWeight NUMBER(5),
+    maxWeight NUMBER(5),
+    currentVolume NUMBER(5),
+    maxVolume NUMBER(5),
+    food_item_ids NUMBER,
+    company_id VARCHAR2(30),
+    branch_id VARCHAR2(30),
+    PRIMARY KEY(company_id, branch_id, containerID)
+);

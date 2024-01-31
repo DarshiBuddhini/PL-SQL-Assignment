@@ -1,0 +1,11 @@
+CREATE TABLE darshi_food_item_tab (
+    food_item_id NUMBER ,
+    food_item_name VARCHAR2(50) NOT NULL,
+    available_qty_in_kg NUMBER(5), 
+    scrapped_qty_in_kg NUMBER(5), 
+    reserved_qty_in_kg NUMBER(5), 
+    PRIMARY KEY (food_item_id) 
+);
+
+
+
