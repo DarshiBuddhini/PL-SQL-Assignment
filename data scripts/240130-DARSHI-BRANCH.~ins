@@ -1,0 +1,15 @@
+DECLARE
+
+BEGIN
+  -- INVOKE APIS
+
+  DARSHI_BRANCH_API.insert_branch('Mainbranch', 'Galle', 'Kasun', 100, 1);
+
+  -- Update an existing branch
+  --DARSHI_BRANCH_API.update_branch('BRANCH_1', 'NewBranchName', 'NewBranchAddress', 'NewBranchManager', 150, '2');
+
+  -- Delete a branch
+  --DARSHI_BRANCH_API.delete_branch('BRANCH_2');
+
+END;
+/
