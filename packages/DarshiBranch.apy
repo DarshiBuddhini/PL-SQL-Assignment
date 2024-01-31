@@ -1,0 +1,153 @@
+CREATE OR REPLACE PACKAGE BODY DARSHI_BRANCH_API AS
+  PROCEDURE insert_branch(branch_name_        IN VARCHAR2,
+                          branch_address_     IN VARCHAR2,
+                          branch_manager_     IN VARCHAR2,
+                          total_war_capacity_ IN NUMBER,
+                          company_id_         IN VARCHAR2) IS
+    branch_id_ VARCHAR2(30);
+  BEGIN
+    SELECT 'BRANCH_' || TO_CHAR(S_BRANCH_ID_SEQ.NEXTVAL)
+      INTO branch_id_
+      FROM DUAL;
+  
+    INSERT INTO darshi_branch_tab
+      (branch_id,
+       branch_name,
+       branch_address,
+       branch_manager,
+       total_war_capacity,
+       company_id)
+    VALUES
+      (branch_id_,
+       branch_name_,
+       branch_address_,
+       branch_manager_,
+       total_war_capacity_,
+       company_id_);
+  END insert_branch;
+
+  PROCEDURE update_branch(branch_id_              IN VARCHAR2,
+                          new_branch_name_        IN VARCHAR2,
+                          new_branch_address_     IN VARCHAR2,
+                          new_branch_manager_     IN VARCHAR2,
+                          new_total_war_capacity_ IN NUMBER,
+                          new_company_id_         IN VARCHAR2) IS
+  BEGIN
+    UPDATE darshi_branch_tab
+       SET branch_name        = new_branch_name_,
+           branch_address     = new_branch_address_,
+           branch_manager     = new_branch_manager_,
+           total_war_capacity = new_total_war_capacity_,
+           company_id         = new_company_id_
+     WHERE branch_id = branch_id_;
+  END update_branch;
+
+  PROCEDURE delete_branch(branch_id_ IN VARCHAR2) IS
+  BEGIN
+    DELETE FROM darshi_branch_tab WHERE branch_id = branch_id_;
+  END delete_branch;
+
+  -- Create function for getting branch name
+  FUNCTION GET_BRANCH_NAME(branch_id_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ VARCHAR2(200);
+  
+    CURSOR get_branch_name IS
+      SELECT branch_name
+        FROM darshi_branch_tab
+       WHERE branch_id = branch_id_;
+  
+  BEGIN
+    OPEN get_branch_name;
+    FETCH get_branch_name
+      INTO result_;
+    CLOSE get_branch_name;
+  
+    RETURN result_;
+  END GET_BRANCH_NAME;
+
+  -- Create function for getting branch address
+  FUNCTION GET_BRANCH_ADDRESS(branch_id_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ VARCHAR2(1000);
+  
+    CURSOR get_branch_address IS
+      SELECT branch_address
+        FROM darshi_branch_tab
+       WHERE branch_id = branch_id_;
+  
+  BEGIN
+    OPEN get_branch_address;
+    FETCH get_branch_address
+      INTO result_;
+    CLOSE get_branch_address;
+  
+    RETURN result_;
+  END GET_BRANCH_ADDRESS;
+
+  -- Create function for getting branch branch_manager
+  FUNCTION GET_BRANCH_MANAGER(branch_id_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ VARCHAR2(200);
+  
+    CURSOR get_branch_manager IS
+      SELECT branch_manager
+        FROM darshi_branch_tab
+       WHERE branch_id = branch_id_;
+  
+  BEGIN
+    OPEN get_branch_manager;
+    FETCH get_branch_manager
+      INTO result_;
+    CLOSE get_branch_manager;
+  
+    RETURN result_;
+  END GET_BRANCH_MANAGER;
+
+  -- Create function for getting total war capacity
+  FUNCTION GET_TOTAL_WAR_CAPACITY(branch_id_ IN VARCHAR2) RETURN NUMBER IS
+    result_ NUMBER;
+  
+    CURSOR get_total_war_capacity IS
+      SELECT total_war_capacity
+        FROM darshi_branch_tab
+       WHERE branch_id = branch_id_;
+  
+  BEGIN
+    OPEN get_total_war_capacity;
+    FETCH get_total_war_capacity
+      INTO result_;
+    CLOSE get_total_war_capacity;
+  
+    RETURN result_;
+  END GET_TOTAL_WAR_CAPACITY;
+
+  -- Create function for getting remaining war capacity
+  FUNCTION GET_REMAINING_WAR_CAPACITY(branch_id_ IN VARCHAR2) RETURN NUMBER IS
+    total_war_capacity_ NUMBER;
+    used_capacity_      NUMBER;
+    remaining_capacity_ NUMBER;
+  
+    CURSOR get_total_war_capacity IS
+      SELECT total_war_capacity
+        FROM darshi_branch_tab
+       WHERE branch_id = branch_id_;
+  
+    CURSOR used_capacity_cursor IS
+      SELECT COUNT(*) FROM darshi_branch_tab WHERE branch_id = branch_id_;
+  BEGIN
+    OPEN get_total_war_capacity;
+    FETCH get_total_war_capacity
+      INTO total_war_capacity_;
+    CLOSE get_total_war_capacity;
+  
+    OPEN used_capacity_cursor;
+    FETCH used_capacity_cursor
+      INTO used_capacity_;
+    CLOSE used_capacity_cursor;
+  
+    -- Calculate remaining war capacity
+    remaining_capacity_ := total_war_capacity_ - used_capacity_;
+  
+    RETURN remaining_capacity_;
+  END GET_REMAINING_WAR_CAPACITY;
+
+END DARSHI_BRANCH_API;
+/

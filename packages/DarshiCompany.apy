@@ -1,0 +1,73 @@
+CREATE OR REPLACE PACKAGE BODY DARSHI_COMPANY_API AS
+  PROCEDURE insert_company(company_name_    IN VARCHAR2,
+                           company_address_ IN VARCHAR2) IS
+    company_reg_no_ VARCHAR2(30);
+  BEGIN
+    SELECT 'COMPANY_' || TO_CHAR(COM_REG_NO_SEQ.NEXTVAL)
+      INTO company_reg_no_
+      FROM DUAL;
+  
+    INSERT INTO darshi_company_tab
+      (company_reg_no, company_name, company_address)
+    VALUES
+      (company_reg_no_, company_name_, company_address_);
+  END insert_company;
+
+  --procedure for updating data
+  PROCEDURE update_company(company_reg_no_  IN VARCHAR2,
+                            new_company_name_ IN VARCHAR2,
+                            new_company_address_ IN VARCHAR2) IS
+  BEGIN
+    UPDATE darshi_company_tab
+    SET company_name    = new_company_name_,
+        company_address = new_address_
+    WHERE company_reg_no = company_reg_no_;
+  END update_company;
+  
+  --DELETE PROCEDURE
+  PROCEDURE delete_company(company_reg_no_ IN VARCHAR2) IS
+  BEGIN
+       DELETE FROM darshi_company_tab
+       WHERE company_reg_no = company_reg_no_;
+  
+  END delete_company;
+  
+  
+  -- create functions
+  FUNCTION GET_COMPANY_NAME(company_reg_no_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ VARCHAR2(200);
+  
+    CURSOR get_company_name IS
+      SELECT company_name
+        FROM darshi_company_tab
+       WHERE company_reg_no = company_reg_no_;
+  
+  BEGIN
+    OPEN get_company_name;
+    FETCH get_company_name
+      INTO result_;
+    CLOSE get_company_name;
+  
+    RETURN result_;
+  END GET_COMPANY_NAME;
+
+  --Create function for getting company address
+  FUNCTION GET_COMPANY_ADDRESS(company_reg_no_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ VARCHAR2(1000);
+  
+    CURSOR get_company_address IS
+      SELECT company_address
+        FROM darshi_company_tab
+       WHERE company_reg_no = company_reg_no_;
+  
+  BEGIN
+    OPEN get_company_address;
+    FETCH get_company_address
+      INTO result_;
+    CLOSE get_company_address;
+  
+    RETURN result_;
+  END GET_COMPANY_ADDRESS;
+
+END DARSHI_COMPANY_API;
+/

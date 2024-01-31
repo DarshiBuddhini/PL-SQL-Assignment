@@ -1,0 +1,59 @@
+CREATE OR REPLACE PACKAGE BODY DARSHI_STORAGE_API AS
+  PROCEDURE insert_storage(containerID_  IN NUMBER,
+                           food_item_id_ IN NUMBER,
+                           company_id_   IN NUMBER,
+                           branch_id_    IN NUMBER,
+                           status_       IN VARCHAR2) IS
+  BEGIN
+    INSERT INTO darshi_storage_tab
+      (containerID, food_item_id, company_id, branch_id, status)
+    VALUES
+      (containerID_, food_item_id_, company_id_, branch_id_, status_);
+  END insert_storage;
+
+  PROCEDURE update_storage(containerID_    IN NUMBER,
+                           food_item_id_   IN NUMBER,
+                           new_company_id_ IN NUMBER,
+                           new_branch_id_  IN NUMBER,
+                           new_status_     IN VARCHAR2) IS
+  BEGIN
+  
+    UPDATE darshi_storage_tab
+       SET company_id = new_company_id_,
+           branch_id  = new_branch_id_,
+           status     = new_status_
+     WHERE containerID = containerID_ AND food_item_id = food_item_id_;
+  END update_storage;
+
+  PROCEDURE delete_storage(containerID_ IN NUMBER, food_item_id_ IN NUMBER) IS
+  BEGIN
+  
+    DELETE FROM darshi_storage_tab
+     WHERE containerID = containerID_ AND food_item_id = food_item_id_;
+  END delete_storage;
+
+  -- Create function for getting storage status
+  FUNCTION GET_STORAGE_STATUS(containerID_  IN NUMBER,
+                              food_item_id_ IN NUMBER,
+                              company_id_   IN NUMBER,
+                              branch_id_    IN NUMBER
+                              
+                              ) RETURN VARCHAR2 IS
+    result_ VARCHAR2(20);
+  
+    CURSOR get_status IS
+      SELECT status
+        FROM darshi_storage_tab
+       WHERE containerID = containerID_ AND food_item_id = food_item_id_ AND
+             company_id = company_id_ AND branch_id = branch_id_;
+  
+  BEGIN
+    OPEN get_status;
+    FETCH get_status
+      INTO result_;
+    CLOSE get_status;
+  
+    RETURN result_;
+  END GET_STORAGE_STATUS;
+
+END DARSHI_STORAGE_API;

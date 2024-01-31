@@ -1,0 +1,136 @@
+
+CREATE OR REPLACE PACKAGE BODY DARSHI_CONTAINER_API AS
+  PROCEDURE insert_container(containerID_   IN NUMBER,
+                             currentWeight_ IN NUMBER,
+                             maxWeight_     IN NUMBER,
+                             currentVolume_ IN NUMBER,
+                             maxVolume_     IN NUMBER,
+                             company_id_    IN NUMBER,
+                             food_item_ids_ IN NUMBER,
+                             branch_id_     IN NUMBER) IS
+  
+  BEGIN
+    INSERT INTO darshi_container_tab
+      (containerID,
+       currentWeight,
+       maxWeight,
+       currentVolume,
+       maxVolume,
+       company_id,
+       food_item_ids,
+       branch_id)
+    VALUES
+      (containerID_,
+       currentWeight_,
+       maxWeight_,
+       currentVolume_,
+       maxVolume_,
+       company_id_,
+       food_item_ids_,
+       branch_id_);
+  END insert_container;
+
+  -- Update an existing container
+
+  PROCEDURE update_container(containerID_       IN NUMBER,
+                             new_currentWeight_ IN NUMBER,
+                             new_maxWeight_     IN NUMBER,
+                             new_currentVolume_ IN NUMBER,
+                             new_maxVolume_     IN NUMBER,
+                             new_company_id_    IN NUMBER,
+                             new_food_item_ids_ IN NUMBER,
+                             new_branch_id_     IN NUMBER) IS
+  BEGIN
+  
+    UPDATE darshi_container_tab
+       SET currentWeight = new_currentWeight_,
+           maxWeight     = new_maxWeight_,
+           currentVolume = new_currentVolume_,
+           maxVolume     = new_maxVolume_,
+           company_id    = new_company_id_,
+           food_item_ids = new_food_item_ids_,
+           branch_id     = new_branch_id_
+     WHERE containerID = containerID_;
+  END update_container;
+
+  -- Delete a container
+  PROCEDURE delete_container(containerID_ IN VARCHAR2) IS
+  BEGIN
+  
+    DELETE FROM darshi_container_tab WHERE containerID = containerID_;
+  END delete_container;
+
+  --create function for current weight
+  FUNCTION GET_CURRENTWEIGHT(containerID_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ NUMBER;
+  
+    CURSOR get_currentWeight IS
+      SELECT currentWeight
+        FROM darshi_container_tab
+       WHERE containerID = containerID_;
+  
+  BEGIN
+    OPEN get_currentWeight;
+    FETCH get_currentWeight
+      INTO result_;
+    CLOSE get_currentWeight;
+  
+    RETURN result_;
+  END GET_CURRENTWEIGHT;
+
+  --function for max weight
+  FUNCTION GET_MAX_WEIGHT(containerID_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ NUMBER;
+  
+    CURSOR get_maxWeight IS
+      SELECT maxWeight
+        FROM darshi_container_tab
+       WHERE containerID = containerID_;
+  
+  BEGIN
+    OPEN get_maxWeight;
+    FETCH get_maxWeight
+      INTO result_;
+    CLOSE get_maxWeight;
+  
+    RETURN result_;
+  END GET_MAX_WEIGHT;
+
+  --function for current volume
+  FUNCTION GET_CURRENT_VOLUME(containerID_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ NUMBER;
+  
+    CURSOR get_currentVolume IS
+      SELECT currentVolume
+        FROM darshi_container_tab
+       WHERE containerID = containerID_;
+  
+  BEGIN
+    OPEN get_currentVolume;
+    FETCH get_currentVolume
+      INTO result_;
+    CLOSE get_currentVolume;
+  
+    RETURN result_;
+  END GET_CURRENT_VOLUME;
+
+  --function for max volume
+  FUNCTION GET_MAX_VOLUME(containerID_ IN VARCHAR2) RETURN VARCHAR2 IS
+    result_ NUMBER;
+  
+    CURSOR get_maxVolume IS
+      SELECT maxVolume
+        FROM darshi_container_tab
+       WHERE containerID = containerID_;
+  
+  BEGIN
+    OPEN get_maxVolume;
+    FETCH get_maxVolume
+      INTO result_;
+    CLOSE get_maxVolume;
+  
+    RETURN result_;
+  END GET_MAX_VOLUME;
+
+END DARSHI_CONTAINER_API;
+/
