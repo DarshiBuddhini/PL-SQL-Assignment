@@ -12,5 +12,14 @@ CREATE OR REPLACE PACKAGE DARSHI_STORAGE_API AS
                            new_status_     IN VARCHAR2);
 
   PROCEDURE delete_storage(containerID_ IN NUMBER, food_item_id_ IN NUMBER);
+
+  --functions
+
+  FUNCTION GET_STORAGE_STATUS(containerID_  IN NUMBER,
+                              food_item_id_ IN NUMBER,
+                              company_id_   IN NUMBER,
+                              branch_id_    IN NUMBER
+                              
+                              ) RETURN VARCHAR2;
 END DARSHI_STORAGE_API;
 /
