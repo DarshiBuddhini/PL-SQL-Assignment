@@ -120,34 +120,33 @@ CREATE OR REPLACE PACKAGE BODY DARSHI_BRANCH_API AS
   END GET_TOTAL_WAR_CAPACITY;
 
   -- Create function for getting remaining war capacity
-  FUNCTION GET_REMAINING_WAR_CAPACITY(branch_id_ IN VARCHAR2) RETURN NUMBER IS
-    total_war_capacity_ NUMBER;
-    used_capacity_      NUMBER;
-    remaining_capacity_ NUMBER;
-  
-    CURSOR get_total_war_capacity IS
-      SELECT total_war_capacity
-        FROM darshi_branch_tab
-       WHERE branch_id = branch_id_;
-  
-    CURSOR used_capacity_cursor IS
-      SELECT COUNT(*) FROM darshi_branch_tab WHERE branch_id = branch_id_;
+
+  -- GET REMAINING CAPACITY (By branch_id)
+  FUNCTION GET_REMN_CAP(branch_id_ IN VARCHAR2) RETURN NUMBER IS
+    result_ NUMBER;
+    CURSOR GET_REM_CAP IS
+      SELECT (
+          (SELECT SUM(total_war_capacity) as total_cap
+           FROM darshi_branch_tab
+           WHERE branch_id = branch_id_) -
+          (SELECT COALESCE(SUM(maxVolume), 0) AS total_max_vol
+           FROM darshi_container_tab
+           WHERE containerID IN
+                 (SELECT containerID
+                  FROM darshi_storage_tab
+                  WHERE status = 'Active' AND branch_id = branch_id_)
+          )
+      ) as remaining_used_vol
+    FROM dual;
+
   BEGIN
-    OPEN get_total_war_capacity;
-    FETCH get_total_war_capacity
-      INTO total_war_capacity_;
-    CLOSE get_total_war_capacity;
-  
-    OPEN used_capacity_cursor;
-    FETCH used_capacity_cursor
-      INTO used_capacity_;
-    CLOSE used_capacity_cursor;
-  
-    -- Calculate remaining war capacity
-    remaining_capacity_ := total_war_capacity_ - used_capacity_;
-  
-    RETURN remaining_capacity_;
-  END GET_REMAINING_WAR_CAPACITY;
+    OPEN GET_REM_CAP;
+    FETCH GET_REM_CAP INTO result_;
+    CLOSE GET_REM_CAP;
+    RETURN result_;
+  END GET_REMN_CAP;
 
 END DARSHI_BRANCH_API;
 /
+
+
