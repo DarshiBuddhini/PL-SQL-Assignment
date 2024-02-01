@@ -13,7 +13,9 @@ CREATE OR REPLACE PACKAGE DARSHI_BRANCH_API AS
                           new_company_id_         IN VARCHAR2);
 
   PROCEDURE delete_branch(branch_id_ IN VARCHAR2);
-
+  
+  
+  PROCEDURE GET_CURRENT_INVENTORY(branch_id_ IN VARCHAR2);
   --functions
 
   FUNCTION GET_BRANCH_NAME(branch_id_ IN VARCHAR2) RETURN VARCHAR2;
