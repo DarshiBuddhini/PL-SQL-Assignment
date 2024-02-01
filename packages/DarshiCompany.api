@@ -7,5 +7,10 @@ CREATE OR REPLACE PACKAGE DARSHI_COMPANY_API AS
                            new_company_address_ IN VARCHAR2);
 
   PROCEDURE delete_company(company_reg_no_ IN VARCHAR2);
+  
+  --functions
+  FUNCTION GET_COMPANY_NAME(company_reg_no_ IN VARCHAR2) RETURN VARCHAR2;
+  FUNCTION GET_COMPANY_ADDRESS(company_reg_no_ IN VARCHAR2) RETURN VARCHAR2;
+  
 END DARSHI_COMPANY_API;
 /
