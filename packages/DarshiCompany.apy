@@ -14,25 +14,22 @@ CREATE OR REPLACE PACKAGE BODY DARSHI_COMPANY_API AS
   END insert_company;
 
   --procedure for updating data
-  PROCEDURE update_company(company_reg_no_  IN VARCHAR2,
-                            new_company_name_ IN VARCHAR2,
-                            new_company_address_ IN VARCHAR2) IS
+  PROCEDURE update_company(company_reg_no_      IN VARCHAR2,
+                           new_company_name_    IN VARCHAR2,
+                           new_company_address_ IN VARCHAR2) IS
   BEGIN
     UPDATE darshi_company_tab
-    SET company_name    = new_company_name_,
-        company_address = new_address_
-    WHERE company_reg_no = company_reg_no_;
+       SET company_name = new_company_name_, company_address = new_company_address_
+     WHERE company_reg_no = company_reg_no_;
   END update_company;
-  
+
   --DELETE PROCEDURE
   PROCEDURE delete_company(company_reg_no_ IN VARCHAR2) IS
   BEGIN
-       DELETE FROM darshi_company_tab
-       WHERE company_reg_no = company_reg_no_;
+    DELETE FROM darshi_company_tab WHERE company_reg_no = company_reg_no_;
   
   END delete_company;
-  
-  
+
   -- create functions
   FUNCTION GET_COMPANY_NAME(company_reg_no_ IN VARCHAR2) RETURN VARCHAR2 IS
     result_ VARCHAR2(200);
