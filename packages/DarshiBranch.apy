@@ -152,13 +152,13 @@ CREATE OR REPLACE PACKAGE BODY DARSHI_BRANCH_API AS
   PROCEDURE GET_CURRNT_INV(branch_id_ IN VARCHAR2) AS
   BEGIN
     FOR i IN (SELECT *
-                FROM MADAWA_FOOD_ITEM_TAB
+                FROM darshi_food_item_tab
                WHERE item_id IN
                      (SELECT item_id
-                        FROM MADAWA_STORAGE_TAB
+                        FROM darshi_storage_tab
                        WHERE container_id IN
                              (SELECT container_id
-                                FROM MADAWA_CONTAINER_TAB WHERE branch_id = branch_id_))) LOOP
+                                FROM darshi_container_tab WHERE branch_id = branch_id_))) LOOP
       DBMS_OUTPUT.PUT_LINE('Item Name: ' || i.item_name);
       DBMS_OUTPUT.PUT_LINE('Item ID: ' || i.item_id);
       DBMS_OUTPUT.PUT_LINE('Available Quantity: ' || i.available_qty);
