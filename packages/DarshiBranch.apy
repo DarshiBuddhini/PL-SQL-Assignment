@@ -148,31 +148,23 @@ CREATE OR REPLACE PACKAGE BODY DARSHI_BRANCH_API AS
 
   
   --get current inventory information
-  PROCEDURE GET_CURRENT_INVENTORY(branch_id_ IN VARCHAR2) IS
-    CURSOR inventory_cursor IS
-      SELECT d.containerID, 
-             d.maxVolume,
-             s.status
-        FROM darshi_container_tab d JOIN darshi_storage_tab s ON d.containerID = s.containerID
-       WHERE s.branch_id = branch_id_;
-  
-    v_containerID darshi_container_tab.containerID%TYPE; 
-    v_maxVolume darshi_container_tab.maxVolume%TYPE;
-    v_status    darshi_storage_tab.status%TYPE;
+ 
+  PROCEDURE GET_CURRNT_INV(branch_id_ IN VARCHAR2) AS
   BEGIN
-    OPEN inventory_cursor;
-    LOOP
-      FETCH inventory_cursor
-        INTO v_containerID, v_maxVolume, v_status;
-      EXIT WHEN inventory_cursor%NOTFOUND;
-    
-      DBMS_OUTPUT.PUT_LINE('Container ID: ' || v_containerID);
-      DBMS_OUTPUT.PUT_LINE('Max Volume: ' || v_maxVolume);
-      DBMS_OUTPUT.PUT_LINE('Status: ' || v_status);
-      
+    FOR i IN (SELECT *
+                FROM MADAWA_FOOD_ITEM_TAB
+               WHERE item_id IN
+                     (SELECT item_id
+                        FROM MADAWA_STORAGE_TAB
+                       WHERE container_id IN
+                             (SELECT container_id
+                                FROM MADAWA_CONTAINER_TAB WHERE branch_id = branch_id_))) LOOP
+      DBMS_OUTPUT.PUT_LINE('Item Name: ' || i.item_name);
+      DBMS_OUTPUT.PUT_LINE('Item ID: ' || i.item_id);
+      DBMS_OUTPUT.PUT_LINE('Available Quantity: ' || i.available_qty);
+      DBMS_OUTPUT.PUT_LINE('Scrapped Quantity: ' || i.scrapped_qty);
     END LOOP;
-    CLOSE inventory_cursor;
-  END GET_CURRENT_INVENTORY;
+  END GET_CURRNT_INV;
   
 END DARSHI_BRANCH_API;
 /
