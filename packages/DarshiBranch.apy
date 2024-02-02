@@ -153,16 +153,16 @@ CREATE OR REPLACE PACKAGE BODY DARSHI_BRANCH_API AS
   BEGIN
     FOR i IN (SELECT *
                 FROM darshi_food_item_tab
-               WHERE item_id IN
-                     (SELECT item_id
+               WHERE food_item_id IN
+                     (SELECT food_item_id
                         FROM darshi_storage_tab
-                       WHERE container_id IN
-                             (SELECT container_id
+                       WHERE containerID IN
+                             (SELECT containerID
                                 FROM darshi_container_tab WHERE branch_id = branch_id_))) LOOP
-      DBMS_OUTPUT.PUT_LINE('Item Name: ' || i.item_name);
-      DBMS_OUTPUT.PUT_LINE('Item ID: ' || i.item_id);
-      DBMS_OUTPUT.PUT_LINE('Available Quantity: ' || i.available_qty);
-      DBMS_OUTPUT.PUT_LINE('Scrapped Quantity: ' || i.scrapped_qty);
+      DBMS_OUTPUT.PUT_LINE('Item Name: ' || i.food_item_name);
+      DBMS_OUTPUT.PUT_LINE('Item ID: ' || i.food_item_id);
+      DBMS_OUTPUT.PUT_LINE('Available Quantity: ' || i.available_qty_in_kg);
+      DBMS_OUTPUT.PUT_LINE('Scrapped Quantity: ' || i.scrapped_qty_in_kg);
     END LOOP;
   END GET_CURRNT_INV;
   
