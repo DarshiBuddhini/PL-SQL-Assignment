@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW branches_with_available_capacity AS
+CREATE OR REPLACE VIEW darshi_available_cap AS
 SELECT b.branch_id,
        b.branch_name,
        b.branch_address,
